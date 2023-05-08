@@ -2,7 +2,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(set-frame-font "Fira Code 12" nil t)
+;; (set-frame-font "Fira Code 12" nil t)
 (setq column-number-mode t)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4) ; or any other preferred value
@@ -16,16 +16,13 @@
 (add-to-list 'default-frame-alist '(height . 59)); Default frame height.
 (set-face-background hl-line-face "#f2f1f0"); Same color as greyness in gtk
 (setq default-input-method "latin-1-prefix")
-(require 'use-package)
 
-;; (use-package fira-code-mode
-;;   :ensure t
-;;   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
-;;   :config (global-fira-code-mode)) ;; Enables fira-code-mode automatically for programming major modes
+(use-package fira-code-mode
+  :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
+  :hook prog-mode) ;; Enables fira-code-mode automatically for programming major modes
 
 ;; Enable vertico
 (use-package vertico
-  :ensure t
   :init
   (vertico-mode)
 
@@ -83,7 +80,6 @@
 
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
-  :ensure t
   :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
@@ -96,7 +92,6 @@
 (add-hook 'c++-mode-hook 'lsp)
 
 (use-package corfu
-  :ensure t
   :custom
   ;; Works with `indent-for-tab-command'. Make sure tab doesn't indent when you
   ;; want to perform completion
@@ -144,7 +139,10 @@ default lsp-passthrough."
   :ensure t)
 
 (use-package format-all
-  :ensure t)
+  :ensure t
+  :config
+  (setq prog-mode-hook 'format-all-mode)
+  (setq format-all-mode-hook 'format-all-ensure-formatter))
 
 ;; (use-package lsp-treemacs
 ;;   :ensure t)
@@ -157,7 +155,7 @@ default lsp-passthrough."
  '(custom-safe-themes
    '("f681100b27d783fefc3b62f44f84eb7fa0ce73ec183ebea5903df506eb314077" default))
  '(package-selected-packages
-   '(auctex fira-code-mode format-all treemacs-projectile magit clang-format no-littering kind-icon corfu lsp-mode orderless vertico use-package yasnippet-snippets quelpa-use-package exec-path-from-shell dracula-theme cape-yasnippet)))
+   '(fira-code-mode format-all treemacs-projectile magit clang-format no-littering kind-icon corfu lsp-mode orderless vertico use-package yasnippet-snippets quelpa-use-package exec-path-from-shell dracula-theme cape-yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
