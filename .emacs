@@ -300,6 +300,9 @@ default lsp-passthrough."
   :init
   (elpy-enable))
 
+(use-package cmake-font-lock
+  :ensure t)
+
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq-default TeX-master nil)
@@ -311,9 +314,6 @@ default lsp-passthrough."
 (global-set-key (kbd "C-x e") 'erase-buffer)
 (global-set-key (kbd "C-x a") 'revert-buffer)
 
-;; (use-package lsp-treemacs
-;;   :ensure t)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -322,7 +322,7 @@ default lsp-passthrough."
  '(custom-safe-themes
    '("8721f7ee8cd0c2e56d23f757b44c39c249a58c60d33194fe546659dabc69eebd" "f681100b27d783fefc3b62f44f84eb7fa0ce73ec183ebea5903df506eb314077" default))
  '(package-selected-packages
-   '(lsp-treemacs consult omnisharp fira-code-mode format-all treemacs-projectile magit clang-format no-littering kind-icon corfu lsp-mode orderless vertico use-package yasnippet-snippets quelpa-use-package exec-path-from-shell dracula-theme cape-yasnippet)))
+   '(lsp-origami lsp-treemacs consult omnisharp fira-code-mode format-all treemacs-projectile magit clang-format no-littering kind-icon corfu lsp-mode orderless vertico use-package yasnippet-snippets quelpa-use-package exec-path-from-shell dracula-theme cape-yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
