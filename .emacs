@@ -13,12 +13,14 @@
 (unless (package-installed-p 'use-package)        ; Unless "use-package" is installed, install "use-package"
   (package-install 'use-package))
 
+(setq make-backup-files nil)
 (set-frame-font "Fira Code Medium" nil t)
 (setq column-number-mode t)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4) ; or any other preferred value
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
+(exec-path-from-shell-initialize)
 
 (global-display-line-numbers-mode 1)
 (global-visual-line-mode 1); Proper line wrapping
@@ -40,6 +42,11 @@
 (global-set-key (kbd "C-x a") 'revert-buffer)
 
 ;; -----------------------------------------------------
+
+;; (use-package breadcrumb
+;;   :ensure t
+;;   :config
+;;   (setq which-func-functions #'(breadcrumb-imenu-crumbs)))
 
 (use-package vertico
   :ensure t
@@ -110,17 +117,26 @@
 (use-package format-all
   :ensure t
   :config
-  (setq prog-mode-hook 'format-all-mode)
+  (add-hook 'prog-mode-hook 'format-all-mode)
   (setq format-all-mode-hook 'format-all-ensure-formatter))
 
 (use-package tex
-  :ensure auctex)
+  :ensure auctex
+  :config
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  (setq reftex-plug-into-AUCTeX t))
 
 (use-package elpy
   :ensure t
   :init
   (elpy-enable)
-  (yas-global-mode))
+  (yas-global-mode)
+  :config
+  (setq python-shell-interpreter-args "-c exec('__import__(\\'readline\\')') -i --simple-prompt")
+  (setq elpy-rpc-verbose t)
+  ;;(setq elpy-rpc-virtualenv-path "/Users/jjaneto/mamba/envs/elpy-rpc")
+  (setq pyvenv-activate "/Users/jjaneto/mamba"))
+
 
 (use-package cmake-font-lock
   :ensure t)
@@ -198,6 +214,29 @@
   ;; This adds thin lines, sorting and hides the mode line of the window.
   (advice-add #'register-preview :override #'consult-register-window))
 
+(use-package rust-mode
+  :ensure t)
+
+(use-package lsp-mode
+  :ensure t
+  :init
+  (add-hook 'c-mode-hook 'lsp)
+  (add-hook 'c++-mode-hook 'lsp)
+  (add-hook 'rust-mode-hook 'lsp)
+
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
+  (setq lsp-idle-delay 0.500))
+
+(use-package outline-indent
+  :ensure t
+  :init
+  (add-hook 'c-mode-hook #'outline-indent-minor-mode)
+  (add-hook 'c++-mode-hook #'outline-indent-minor-mode)
+  (add-hook 'rust-mode-hook #'outline-indent-minor-mode)
+  :custom
+  (outline-indent-ellipsis " ▼ "))
+
 (use-package corfu
   :ensure t
   :custom
@@ -238,15 +277,6 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
-(use-package lsp-mode
-  :ensure t
-  :init
-  (add-hook 'c-mode-hook 'lsp)
-  (add-hook 'c++-mode-hook 'lsp)
-
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024))
-  (setq lsp-idle-delay 0.500))
 
 ;; Add extensions
 (use-package cape
@@ -274,7 +304,55 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(vertico)))
+ '(custom-safe-themes
+   '("2d74de1cc32d00b20b347f2d0037b945a4158004f99877630afc034a674e3ab7"
+     "11819dd7a24f40a766c0b632d11f60aaf520cf96bd6d8f35bae3399880937970"
+     "551320837bd87074e3de38733e0a8553618c13f7208eda8ec9633d59a70bc284"
+     "c650a74280e8ce4ae4b50835b7a3bc62aeffa202ffea82260e529f0a69027696"
+     "dcb1cc804b9adca583e4e65755895ba0a66ef82d29464cf89a78b88ddac6ca53"
+     "603a831e0f2e466480cdc633ba37a0b1ae3c3e9a4e90183833bc4def3421a961"
+     default))
+ '(format-all-default-formatters
+   '(("Assembly" asmfmt) ("ATS" atsfmt) ("Bazel" buildifier)
+     ("BibTeX" emacs-bibtex) ("C" clang-format) ("C#" csharpier)
+     ("C++" clang-format) ("Cabal Config" cabal-fmt)
+     ("Clojure" zprint) ("CMake" cmake-format) ("Crystal" crystal)
+     ("CSS" prettier) ("Cuda" clang-format) ("D" dfmt)
+     ("Dart" dart-format) ("Dhall" dhall) ("Dockerfile" dockfmt)
+     ("Elixir" mix-format) ("Elm" elm-format)
+     ("Emacs Lisp" emacs-lisp) ("Erlang" efmt) ("F#" fantomas)
+     ("Fish" fish-indent) ("Fortran Free Form" fprettify)
+     ("GLSL" clang-format) ("Go" gofmt) ("GraphQL" prettier)
+     ("Haskell" brittany) ("HCL" hclfmt) ("HLSL" clang-format)
+     ("HTML" html-tidy) ("HTML+EEX" mix-format)
+     ("HTML+ERB" erb-format) ("Hy" emacs-hy) ("Java" clang-format)
+     ("JavaScript" prettier) ("JSON" prettier) ("JSON5" prettier)
+     ("Jsonnet" jsonnetfmt) ("JSX" prettier) ("Kotlin" ktlint)
+     ("LaTeX" latexindent) ("Less" prettier)
+     ("Literate Haskell" brittany) ("Lua" lua-fmt)
+     ("Markdown" prettier) ("Meson" muon-fmt) ("Nix" nixpkgs-fmt)
+     ("Objective-C" clang-format) ("OCaml" ocp-indent)
+     ("Perl" perltidy) ("PHP" prettier)
+     ("Protocol Buffer" clang-format) ("PureScript" purty)
+     ("Python" black) ("R" styler) ("Reason" bsrefmt)
+     ("ReScript" rescript) ("Ruby" rufo) ("Rust" rustfmt)
+     ("Scala" scalafmt) ("SCSS" prettier) ("Shell" shfmt)
+     ("Solidity" prettier) ("SQL" sqlformat) ("Svelte" prettier)
+     ("Swift" swiftformat) ("Terraform" terraform-fmt)
+     ("TOML" prettier) ("TSX" prettier) ("TypeScript" prettier)
+     ("V" v-fmt) ("Verilog" istyle-verilog) ("Vue" prettier)
+     ("XML" html-tidy) ("YAML" prettier) ("Zig" zig)
+     ("_Angular" prettier) ("_AZSL" clang-format)
+     ("_Beancount" bean-format) ("_Caddyfile" caddy-fmt)
+     ("_Flow" prettier) ("_Gleam" gleam) ("_Ledger" ledger-mode)
+     ("_Nginx" nginxfmt) ("_Snakemake" snakefmt)))
+ '(package-selected-packages nil)
+ '(python-interpreter "python")
+ '(python-interpreter-args "-i")
+ '(python-shell-extra-pythonpaths '("/Users/jjaneto/git/python-mip"))
+ '(python-shell-interpreter "ipython"))
+;;'(pyvenv-activate "/Users/jjaneto/mamba"))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
