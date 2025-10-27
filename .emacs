@@ -2,7 +2,8 @@
 ;; A list of package repositories
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org"   . "https://orgmode.org/elpa/")
-                         ("elpa"  . "https://elpa.gnu.org/packages/")))
+                         ("elpa"  . "https://elpa.gnu.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 
 (package-initialize)                 ; Initializes the package system and prepares it to be used
 
@@ -34,6 +35,7 @@
 (setq TeX-parse-self t)
 (setq-default TeX-master nil)
 
+(add-hook 'after-init-hook #'global-flycheck-mode)
 (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 (add-hook 'LaTeX-mode-hook 'flyspell-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
@@ -346,12 +348,15 @@
      ("_Beancount" bean-format) ("_Caddyfile" caddy-fmt)
      ("_Flow" prettier) ("_Gleam" gleam) ("_Ledger" ledger-mode)
      ("_Nginx" nginxfmt) ("_Snakemake" snakefmt)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(auctex breadcrumb cape cmake-font-lock consult corfu dracula-theme
+            eat elpy exec-path-from-shell flycheck format-all lsp-mode
+            magit marginalia orderless outline-indent rust-mode
+            treemacs treemacs-all-the-icons treemacs-projectile
+            vertico))
  '(python-interpreter "python")
  '(python-interpreter-args "-i")
- '(python-shell-extra-pythonpaths '("/Users/jjaneto/git/python-mip"))
- '(python-shell-interpreter "ipython"))
-;;'(pyvenv-activate "/Users/jjaneto/mamba"))
+ '(python-shell-interpreter "ipython")))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
