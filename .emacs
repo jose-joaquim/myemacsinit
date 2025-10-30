@@ -114,6 +114,14 @@
         completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package magit
+  :ensure t
+  :bind
+  ("M-M" . magit))
+
+(use-package treemacs
+  :ensure t)
+
+(use-package projectile
   :ensure t)
 
 (use-package format-all
